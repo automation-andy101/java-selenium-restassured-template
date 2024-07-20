@@ -6,7 +6,9 @@ import org.openqa.selenium.WebDriver;
 import java.time.Duration;
 
 public class ToDoListPage extends BasePage {
-    private final By newToDoInput = By.id("add-name");
+    private final By addNewToDoInput = By.id("add-name");
+    private final By addNewToDoCalenderExpander = By.id("add-date");
+    private final By addNewToDobutton = By.id("add");
 
     /**
      * Constructor
@@ -24,16 +26,25 @@ public class ToDoListPage extends BasePage {
      * @param timeout the timeout in seconds to wait for the add new todo input field element to be visible
      */
     public void enterTextIntoAddNewToDoInputBox(String text, Duration timeout) {
-        enterText(newToDoInput, text, timeout);
+        enterText(addNewToDoInput, text, timeout);
     }
 
     /**
-     * Enters text into the add new todo input field.
+     * Open/close date selection element.
      *
      * @param timeout the timeout in seconds to wait for the add new todo input field element to be visible
      */
-    public void openAddNewTodoCalender(Duration timeout) {
+    public void openCloseAddNewTodoCalender(Duration timeout) {
+        clickElement(addNewToDoCalenderExpander, timeout);
+    }
 
+    /**
+     * Click Add button element.
+     *
+     * @param timeout the timeout in seconds to wait for the add new todo button element to be visible
+     */
+    public void clickAddNewTodoButton(Duration timeout) {
+        clickElement(addNewToDobutton, timeout);
     }
 
 }
