@@ -12,52 +12,88 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
+import ui.utils.ReadPropertiesFile;
+
+import java.io.FileReader;
+import java.io.IOException;
+import java.util.Properties;
 
 public class Hooks {
 //    private static WebDriver driver;
-    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+//    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
+    private static WebDriver driver;
+    public static Properties properties = new Properties();
+    public static FileReader fileReader;
+
+
 
     @Before
-    public void setUp() {
+    public void setUp() throws IOException {
         String browser = System.getProperty("browser", "chrome");
+        String environment = System.getProperty("env", "dev");
+        String baseUrl = "";
 
         switch (browser.toLowerCase()) {
             case "chrome":
                 WebDriverManager.chromedriver().setup();
                 ChromeOptions chromeOptions  = new ChromeOptions();
                 chromeOptions.addArguments("--start-maximised");
-                driver.set(new ChromeDriver(chromeOptions));
+//                driver.set(new ChromeDriver(chromeOptions));
+                driver = new ChromeDriver(chromeOptions);
                 break;
             case "firefox":
                 WebDriverManager.firefoxdriver().setup();
                 FirefoxOptions firefoxOptions  = new FirefoxOptions();
                 firefoxOptions.addArguments("--start-maximised");
-                driver.set(new FirefoxDriver(firefoxOptions));
+//                driver.set(new FirefoxDriver(firefoxOptions));
+                driver = new FirefoxDriver(firefoxOptions);
                 break;
             case "edge":
                 WebDriverManager.edgedriver().setup();
                 EdgeOptions edgeOptions = new EdgeOptions();
-                driver.set(new EdgeDriver(edgeOptions));
+//                driver.set(new EdgeDriver(edgeOptions));
+                driver = new EdgeDriver(edgeOptions);
                 break;
             case "safari":
                 WebDriverManager.safaridriver().setup();
                 SafariOptions safariOptions = new SafariOptions();
-                driver.set(new SafariDriver(safariOptions));
+//                driver.set(new SafariDriver(safariOptions));
+                driver = new SafariDriver(safariOptions);
                 break;
             default:
                 throw new IllegalArgumentException("Unsupported browser: " + browser);
         }
+
+        switch (environment.toLowerCase()) {
+            case "dev":
+                baseUrl = ReadPropertiesFile.readProperty("dev-todo-base-url");
+                driver.get(baseUrl);
+                break;
+            case "test":
+                baseUrl = ReadPropertiesFile.readProperty("test-todo-base-url");
+                driver.get(baseUrl);
+                break;
+            default:
+                throw new IllegalArgumentException("Unsupported environment: " + environment);
+        }
     }
+
+//    @After
+//    public void tearDown() {
+//        if (driver.get() != null) {
+//            driver.get().quit();
+//            driver.remove();
+//        }
+//    }
 
     @After
     public void tearDown() {
-        if (driver.get() != null) {
-            driver.get().quit();
-            driver.remove();
+        if (driver != null) {
+            driver.quit();
         }
     }
 
     public static WebDriver getDriver() {
-        return driver.get();
+        return driver;
     }
 }
