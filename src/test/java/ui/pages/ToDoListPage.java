@@ -9,6 +9,7 @@ public class ToDoListPage extends BasePage {
     private final By addNewToDoInput = By.id("add-name");
     private final By addNewToDoCalenderExpander = By.id("add-date");
     private final By addNewToDobutton = By.id("add");
+    private final By toDosTable = By.id("todos");
 
     /**
      * Constructor
@@ -47,4 +48,15 @@ public class ToDoListPage extends BasePage {
         clickElement(addNewToDobutton, timeout);
     }
 
+    /**
+     * Get column Name text for row n
+     *
+     * @param rowNum the row number
+     * @return row n, Name column text
+     */
+    public String getNameTextForRow(int rowNum) {
+        int nameColumnNum = 2;
+        By locatorForTableCell = By.xpath("//tbody[@id='todos']/tr[" + rowNum + "]/td[" + nameColumnNum + "]");
+        return getElementText(locatorForTableCell, Duration.ofSeconds(10));
+    }
 }

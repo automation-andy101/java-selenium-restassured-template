@@ -22,13 +22,10 @@ public class Hooks {
 //    private static WebDriver driver;
 //    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static WebDriver driver;
-    public static Properties properties = new Properties();
-    public static FileReader fileReader;
-
-
 
     @Before
     public void setUp() throws IOException {
+        System.out.println("ENTERED INTO BEFORE BLOCK");
         String browser = System.getProperty("browser", "chrome");
         String environment = System.getProperty("env", "dev");
         String baseUrl = "";
@@ -67,6 +64,8 @@ public class Hooks {
         switch (environment.toLowerCase()) {
             case "dev":
                 baseUrl = ReadPropertiesFile.readProperty("dev-todo-base-url");
+                System.out.println("HELLO WORLD!!!!");
+                System.out.println(baseUrl);
                 driver.get(baseUrl);
                 break;
             case "test":
