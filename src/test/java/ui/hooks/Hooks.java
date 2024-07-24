@@ -12,11 +12,9 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
-import ui.utils.ReadPropertiesFile;
+import utils.ReadPropertiesFile;
 
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.Properties;
 
 public class Hooks {
 //    private static WebDriver driver;
@@ -64,8 +62,6 @@ public class Hooks {
         switch (environment.toLowerCase()) {
             case "dev":
                 baseUrl = ReadPropertiesFile.readProperty("dev-todo-base-url");
-                System.out.println("HELLO WORLD!!!!");
-                System.out.println(baseUrl);
                 driver.get(baseUrl);
                 break;
             case "test":
