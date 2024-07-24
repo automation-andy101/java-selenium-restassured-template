@@ -3,11 +3,13 @@ package ui.pages;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 
+import java.text.SimpleDateFormat;
 import java.time.Duration;
+import java.util.Date;
 
 public class ToDoListPage extends BasePage {
     private final By addNewToDoInput = By.id("add-name");
-    private final By addNewToDoCalenderExpander = By.id("add-date");
+    private final By addNewToDoDate = By.id("add-date");
     private final By addNewToDobutton = By.id("add");
     private final By toDosTable = By.id("todos");
 
@@ -33,10 +35,22 @@ public class ToDoListPage extends BasePage {
     /**
      * Open/close date selection element.
      *
+     * @param timeout the timeout in seconds to wait for the add new todo date selection element to be visible
+     */
+    public void openOnDateSelector(Duration timeout) {
+        clickElement(addNewToDoDate, timeout);
+    }
+
+    /**
+     * Enter todays date
+     *
      * @param timeout the timeout in seconds to wait for the add new todo input field element to be visible
      */
-    public void openCloseAddNewTodoCalender(Duration timeout) {
-        clickElement(addNewToDoCalenderExpander, timeout);
+    public void selectTodaysDateFromDateSelector(Duration timeout) {
+        Date today = new Date();
+        SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+        String formattedDate = formatter.format(today);
+        enterText(addNewToDoDate, formattedDate, Duration.ofSeconds(10));
     }
 
     /**

@@ -23,13 +23,13 @@ public class AddNewToDoStepDefinitions {
         toDoListPage.enterTextIntoAddNewToDoInputBox(text, Duration.ofSeconds(10));
     }
 
-    @And("click the Add button")
-    public void clickAddButton() {
-        toDoListPage.clickAddNewTodoButton(Duration.ofSeconds(10));
+    @When("select the current date")
+    public void selectCurrentDate() {
+        toDoListPage.selectTodaysDateFromDateSelector(Duration.ofSeconds(10));
     }
 
-    @And("select todays date")
-    public void selectTodaysDate() {
+    @And("click the Add button")
+    public void clickAddButton() throws InterruptedException {
         toDoListPage.clickAddNewTodoButton(Duration.ofSeconds(10));
     }
 

@@ -1,6 +1,7 @@
 package ui.pages;
 
 import org.openqa.selenium.*;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.logging.log4j.LogManager;
@@ -111,8 +112,26 @@ public class BasePage {
         return element.getText();
     }
 
+    /**
+     * Waits for the element to be visible then click it
+     *
+     * @param locator the By locator of the element
+     * @param timeout the maximum time to wait for the element to become clickable
+     */
     public void clickElement(By locator, Duration timeout) {
         WebElement element = waitForElementToBeClickable(locator, timeout);
+    }
+
+    /**
+     * Waits for the element to be clickable, then click on it, then press ENTER key on it
+     *
+     * @param locator the By locator of the element
+     * @param timeout the maximum time to wait for the element to become clickable
+     */
+    public void pressEnterOnElement(By locator, Duration timeout) {
+        WebElement element = waitForElementToBeVisible(locator, timeout);
+        Actions actions = new Actions(driver);
+        actions.click(element).sendKeys(Keys.ENTER).perform();
     }
 
     /**
