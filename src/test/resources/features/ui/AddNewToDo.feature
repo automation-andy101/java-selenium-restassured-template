@@ -5,12 +5,12 @@ Feature: Add a new todo feature
   so that I have a list of items that I need to complete
 
 #  Background:
-#    Given I am on the Todo app homepage
+#    Given get list of Todos
 #    And the todo list is empty
 
 #    @DeleteCreatedTodoAfterTest
     Scenario: Add a new todo item
-#      Given the todo list is empty
+      Given the todo list is empty
       When I enter "Walk the dog" into the add new todo input element
       And select the current date
       And click the Add button
