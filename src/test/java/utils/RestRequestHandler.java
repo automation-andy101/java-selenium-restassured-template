@@ -57,19 +57,18 @@ public class RestRequestHandler {
     }
 
     public Pair<List<ToDo>, Integer> getTodos() throws IOException {
-        String url = baseUrl + ReadPropertiesFile.readProperty("get-todo-items-endpoint");
+        String url = baseUrl + ReadPropertiesFile.readProperty("get-todos-endpoint");
 
         Pair<Response, Integer> responsePair = restAssuredGetRequest(url);
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
         List<ToDo> toDosResponse = mapper.readValue(response.getBody().asString(), new TypeReference<List<ToDo>>(){});
-        System.out.println("CHIPS AND BEANS - " + toDosResponse.get(1).toString());
         return  Pair.of(toDosResponse, statusCode);
     }
 
     public Pair<Response, Integer> deleteToDo(int id) throws IOException {
-        String url = baseUrl + ReadPropertiesFile.readProperty("delete-todo-items-endpoint");
+        String url = baseUrl + ReadPropertiesFile.readProperty("delete-todo-endpoint");
         url = url.replace("ID", Integer.toString(id));
 
         Pair<Response, Integer> responsePair = restAssuredDeleteRequest(url);
