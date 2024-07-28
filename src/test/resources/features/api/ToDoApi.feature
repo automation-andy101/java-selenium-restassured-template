@@ -4,18 +4,17 @@ Feature: Todo API
   So that I can efficiently create, read, update, and delete my todos.
 
   Scenario: Get all todos
-    When I send a request to GET all todos
+    When I send a GET request to retrieve all todos
     Then the response status code is 200
     And the response contains a list of todos
 
-#  Scenario: Get a single todo by ID
-#    Given the API is running
-#    And a todo with ID 1 exists
-#    When I send a GET request to "/todos/1"
-#    Then the response status code should be 200
-#    And the response should be in JSON format
-#    And the response should contain the todo with ID 1
-#
+  Scenario: Get a single todo by ID
+    Given I send a GET request to retrieve all todos
+    And I extract the ID of the first todo in the list
+    When I send a GET request for the todo with the extracted ID
+    Then the response status code is 200
+    And the response contains the details of the todo with the requested ID
+
 #  Scenario: Create a new todo
 #    Given the API is running
 #    When I send a POST request to "/todos" with the following data

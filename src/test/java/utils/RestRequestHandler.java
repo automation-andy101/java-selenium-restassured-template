@@ -1,6 +1,7 @@
 package utils;
 
 import api.models.response.ToDo;
+import api.models.response.ToDoResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -65,6 +66,17 @@ public class RestRequestHandler {
 
         List<ToDo> toDosResponse = mapper.readValue(response.getBody().asString(), new TypeReference<List<ToDo>>(){});
         return  Pair.of(toDosResponse, statusCode);
+    }
+
+    public Pair<ToDoResponse, Integer> getTodoById(int id) throws IOException {
+        String url = baseUrl + ReadPropertiesFile.readProperty("get-todo-endpoint");
+
+        Pair<Response, Integer> responsePair = restAssuredGetRequest(url);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
+        return  Pair.of(toDoResponse, statusCode);
     }
 
     public Pair<Response, Integer> deleteToDo(int id) throws IOException {

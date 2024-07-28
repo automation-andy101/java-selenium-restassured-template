@@ -4,5 +4,8 @@ import lombok.Data;
 
 @Data
 public class ToDoResponse {
-    private ToDo[] ToDos;
+    private int id;
+    private String name;
+    private String isComplete;
+    private String dateDue;
 }
