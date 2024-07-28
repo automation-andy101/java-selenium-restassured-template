@@ -24,53 +24,57 @@ public class Hooks {
     @Before
     public void setUp() throws IOException {
         System.out.println("ENTERED INTO BEFORE BLOCK");
-        String browser = System.getProperty("browser", "chrome");
-        String environment = System.getProperty("env", "dev");
-        String baseUrl = "";
+        String testType = System.getProperty("testType", "api");
 
-        switch (browser.toLowerCase()) {
-            case "chrome":
-                WebDriverManager.chromedriver().setup();
-                ChromeOptions chromeOptions  = new ChromeOptions();
-                chromeOptions.addArguments("--start-maximised");
+//        if (testType.equals("ui")) {
+            String browser = System.getProperty("browser", "chrome");
+            String environment = System.getProperty("env", "dev");
+            String baseUrl = "";
+
+            switch (browser.toLowerCase()) {
+                case "chrome":
+                    WebDriverManager.chromedriver().setup();
+                    ChromeOptions chromeOptions = new ChromeOptions();
+                    chromeOptions.addArguments("--start-maximised");
 //                driver.set(new ChromeDriver(chromeOptions));
-                driver = new ChromeDriver(chromeOptions);
-                break;
-            case "firefox":
-                WebDriverManager.firefoxdriver().setup();
-                FirefoxOptions firefoxOptions  = new FirefoxOptions();
-                firefoxOptions.addArguments("--start-maximised");
+                    driver = new ChromeDriver(chromeOptions);
+                    break;
+                case "firefox":
+                    WebDriverManager.firefoxdriver().setup();
+                    FirefoxOptions firefoxOptions = new FirefoxOptions();
+                    firefoxOptions.addArguments("--start-maximised");
 //                driver.set(new FirefoxDriver(firefoxOptions));
-                driver = new FirefoxDriver(firefoxOptions);
-                break;
-            case "edge":
-                WebDriverManager.edgedriver().setup();
-                EdgeOptions edgeOptions = new EdgeOptions();
+                    driver = new FirefoxDriver(firefoxOptions);
+                    break;
+                case "edge":
+                    WebDriverManager.edgedriver().setup();
+                    EdgeOptions edgeOptions = new EdgeOptions();
 //                driver.set(new EdgeDriver(edgeOptions));
-                driver = new EdgeDriver(edgeOptions);
-                break;
-            case "safari":
-                WebDriverManager.safaridriver().setup();
-                SafariOptions safariOptions = new SafariOptions();
+                    driver = new EdgeDriver(edgeOptions);
+                    break;
+                case "safari":
+                    WebDriverManager.safaridriver().setup();
+                    SafariOptions safariOptions = new SafariOptions();
 //                driver.set(new SafariDriver(safariOptions));
-                driver = new SafariDriver(safariOptions);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported browser: " + browser);
-        }
+                    driver = new SafariDriver(safariOptions);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported browser: " + browser);
+            }
 
-        switch (environment.toLowerCase()) {
-            case "dev":
-                baseUrl = ReadPropertiesFile.readProperty("dev-todo-base-url");
-                driver.get(baseUrl);
-                break;
-            case "test":
-                baseUrl = ReadPropertiesFile.readProperty("test-todo-base-url");
-                driver.get(baseUrl);
-                break;
-            default:
-                throw new IllegalArgumentException("Unsupported environment: " + environment);
-        }
+            switch (environment.toLowerCase()) {
+                case "dev":
+                    baseUrl = ReadPropertiesFile.readProperty("dev-todo-base-url");
+                    driver.get(baseUrl);
+                    break;
+                case "test":
+                    baseUrl = ReadPropertiesFile.readProperty("test-todo-base-url");
+                    driver.get(baseUrl);
+                    break;
+                default:
+                    throw new IllegalArgumentException("Unsupported environment: " + environment);
+            }
+//        }
     }
 
 //    @After

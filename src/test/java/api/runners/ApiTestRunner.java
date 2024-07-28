@@ -1,14 +1,14 @@
-package ui.runners;
+package api.runners;
 
-import org.junit.runner.RunWith;
 import io.cucumber.junit.Cucumber;
 import io.cucumber.junit.CucumberOptions;
+import org.junit.runner.RunWith;
 
 @RunWith(Cucumber.class)
 @CucumberOptions(
-        features = {"classpath:features/ui"},
-        glue = {"ui.stepdefinitions", "ui.hooks"},
+        features = {"classpath:features/api"},
+        glue = {"api.stepdefinitions", "api.hooks"},
         plugin = {"pretty", "html:target/cucumber-reports"}
 )
-public class TestRunner {
+public class ApiTestRunner {
 }

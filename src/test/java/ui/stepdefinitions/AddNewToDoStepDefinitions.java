@@ -36,8 +36,7 @@ public class AddNewToDoStepDefinitions {
     }
 
     @When("I enter {string} into the add new todo input element")
-    public void addNewTodoInputElement(String text) throws InterruptedException {
-        Thread.sleep(20000);
+    public void addNewTodoInputElement(String text) {
         toDoListPage.enterTextIntoAddNewToDoInputBox(text, Duration.ofSeconds(10));
     }
 
@@ -47,7 +46,7 @@ public class AddNewToDoStepDefinitions {
     }
 
     @And("click the Add button")
-    public void clickAddButton() throws InterruptedException {
+    public void clickAddButton() {
         toDoListPage.clickAddNewTodoButton(Duration.ofSeconds(10));
     }
 
