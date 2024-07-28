@@ -70,6 +70,7 @@ public class RestRequestHandler {
 
     public Pair<ToDoResponse, Integer> getTodoById(int id) throws IOException {
         String url = baseUrl + ReadPropertiesFile.readProperty("get-todo-endpoint");
+        url = url.replace("ID", Integer.toString(id));
 
         Pair<Response, Integer> responsePair = restAssuredGetRequest(url);
         Response response = responsePair.getLeft();

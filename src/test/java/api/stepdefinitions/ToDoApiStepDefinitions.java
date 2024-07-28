@@ -29,8 +29,8 @@ public class ToDoApiStepDefinitions {
         toDosResponse = restRequestHandler.getTodos();
     }
 
-    @Then("the response status code is {int}")
-    public void responseStatusCodeIs200(int expectedStatusCode) {
+    @Then("the response status code for getting all Todos is {int}")
+    public void responseStatusCodeForGettingAllTodosIs200(int expectedStatusCode) {
         MatcherAssert.assertThat(toDosResponse.getRight(), equalTo(expectedStatusCode));
     }
 
@@ -63,7 +63,7 @@ public class ToDoApiStepDefinitions {
         todoId = toDosResponse.getLeft().get(1).getId();
     }
 
-    @And("I send a GET request for the todo with the extracted ID")
+    @When("I send a GET request for the todo with the extracted ID")
     public void sendRequestToGetASingleTodoById() throws IOException {
         RestRequestHandler restRequestHandler = new RestRequestHandler();
 
@@ -73,9 +73,18 @@ public class ToDoApiStepDefinitions {
         todoId = toDoResponse.getLeft().getId();
     }
 
+    @Then("the response status code for getting a single Todo is {int}")
+    public void responseStatusCodeForGettingASingleTodoIs200(int expectedStatusCode) {
+        MatcherAssert.assertThat(toDoResponse.getRight(), equalTo(expectedStatusCode));
+    }
+
     @And("the response contains the details of the todo with the requested ID")
     public void assertResponseContainsExpectedToDo() throws IOException {
-
+        assertTrue("Response should be an instance of a Todo object", toDoResponse.getLeft() instanceof ToDoResponse);
+        assertNotNull("Todo ID should not be null", toDoResponse.getLeft().getId());
+        assertNotNull("Todo Name should not be null", toDoResponse.getLeft().getName());
+        assertNotNull("Todo Completed status should not be null", toDoResponse.getLeft().getIsComplete());
+        assertNotNull("Todo Date Due should not be null", toDoResponse.getLeft().getDateDue());
     }
 
 }

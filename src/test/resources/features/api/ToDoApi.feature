@@ -5,14 +5,14 @@ Feature: Todo API
 
   Scenario: Get all todos
     When I send a GET request to retrieve all todos
-    Then the response status code is 200
+    Then the response status code for getting all Todos is 200
     And the response contains a list of todos
 
   Scenario: Get a single todo by ID
     Given I send a GET request to retrieve all todos
     And I extract the ID of the first todo in the list
     When I send a GET request for the todo with the extracted ID
-    Then the response status code is 200
+    Then the response status code for getting a single Todo is 200
     And the response contains the details of the todo with the requested ID
 
 #  Scenario: Create a new todo
