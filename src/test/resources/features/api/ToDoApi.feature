@@ -15,14 +15,13 @@ Feature: Todo API
     Then the response status code for getting a single Todo is 200
     And the response contains the details of the todo with the requested ID
 
-#  Scenario: Create a new todo
-#    Given the API is running
-#    When I send a POST request to "/todos" with the following data
-#      | title      | description            |
-#      | "New Todo" | "This is a new todo"   |
-#    Then the response status code should be 201
-#    And the response should be in JSON format
-#    And the response should contain the created todo with title "New Todo" and description "This is a new todo"
+  Scenario: Create a new todo
+    When I send a POST request to create a new todo with the following data
+      | name           | isComplete | dueDate     |
+      | "Walk the cat" | false      | DATETIMENOW |
+    Then the response status code should be 201
+    And the response should be in JSON format
+    And the response should contain the created todo with title "New Todo" and description "This is a new todo"
 #
 #  Scenario: Update a todo
 #    Given the API is running

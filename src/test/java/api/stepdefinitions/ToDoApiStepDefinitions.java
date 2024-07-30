@@ -1,7 +1,9 @@
 package api.stepdefinitions;
 
+import api.models.requests.ToDoRequest;
 import api.models.response.ToDo;
 import api.models.response.ToDoResponse;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
@@ -9,11 +11,15 @@ import io.restassured.response.Response;
 import org.apache.commons.lang3.tuple.Pair;
 import org.hamcrest.MatcherAssert;
 import utils.RestRequestHandler;
+
+import static api.testdata.ToDoTestData.createToDo;
 import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.List;
+import java.util.Objects;
 
 import static org.hamcrest.CoreMatchers.equalTo;
+import static utils.Utils.getDateTimeNow;
 
 public class ToDoApiStepDefinitions {
     public Pair<List<ToDo>, Integer> toDosResponse;
@@ -87,4 +93,18 @@ public class ToDoApiStepDefinitions {
         assertNotNull("Todo Date Due should not be null", toDoResponse.getLeft().getDateDue());
     }
 
+    @When("I send a POST request to create a new todo with the following data")
+    public void sendPostRequestToCreateNewTodo(DataTable dataTable) throws IOException {
+        String name = dataTable.cell(1, 0);
+        boolean isComplete = Boolean.parseBoolean(dataTable.cell(1, 1));
+        String dueDate = dataTable.cell(1, 2);
+
+        if (Objects.equals(dueDate, "DATETIMENOW")) {
+            dueDate = getDateTimeNow("yyyy-MM-dd'T'HH:mm:ss");
+        }
+
+        ToDoRequest toDoRequest = createToDo(name, isComplete, dueDate);
+
+
+    }
 }
