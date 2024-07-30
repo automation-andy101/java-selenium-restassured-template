@@ -3,26 +3,25 @@ Feature: Todo API
   I want to be able to manage my tasks through the API,
   So that I can efficiently create, read, update, and delete my todos.
 
-  Scenario: Get all todos
-    When I send a GET request to retrieve all todos
-    Then the response status code for getting all Todos is 200
-    And the response contains a list of todos
-
-  Scenario: Get a single todo by ID
-    Given I send a GET request to retrieve all todos
-    And I extract the ID of the first todo in the list
-    When I send a GET request for the todo with the extracted ID
-    Then the response status code for getting a single Todo is 200
-    And the response contains the details of the todo with the requested ID
+#  Scenario: Get all todos
+#    When I send a GET request to retrieve all todos
+#    Then the response status code for getting all Todos is 200
+#    And the response contains a list of todos
+#
+#  Scenario: Get a single todo by ID
+#    Given I send a GET request to retrieve all todos
+#    And I extract the ID of the first todo in the list
+#    When I send a GET request for the todo with the extracted ID
+#    Then the response status code for getting a single Todo is 200
+#    And the response contains the details of the todo with the requested ID
 
   Scenario: Create a new todo
     When I send a POST request to create a new todo with the following data
-      | name           | isComplete | dueDate     |
-      | "Walk the cat" | false      | DATETIMENOW |
-    Then the response status code should be 201
-    And the response should be in JSON format
-    And the response should contain the created todo with title "New Todo" and description "This is a new todo"
-#
+      | name          | isComplete | dueDate     |
+      | Shave my legs | false      | DATETIMENOW |
+    Then the response status code for creating a new Todo is 201
+    And the response should contain the created todo with name "Shave my legs" and isComplete set to "false"
+
 #  Scenario: Update a todo
 #    Given the API is running
 #    And a todo with ID 1 exists

@@ -24,6 +24,7 @@ import static utils.Utils.getDateTimeNow;
 public class ToDoApiStepDefinitions {
     public Pair<List<ToDo>, Integer> toDosResponse;
     public Pair<ToDoResponse, Integer> toDoResponse;
+    public Pair<ToDoResponse, Integer> createNewToDoResponse;
     public Pair<Response, Integer> deleteToDoResponse;
     private int todoId;
 
@@ -84,6 +85,11 @@ public class ToDoApiStepDefinitions {
         MatcherAssert.assertThat(toDoResponse.getRight(), equalTo(expectedStatusCode));
     }
 
+    @Then("the response status code for creating a new Todo is {int}")
+    public void responseStatusCodeForCreatingANewTodoIs201(int expectedStatusCode) {
+        MatcherAssert.assertThat(createNewToDoResponse.getRight(), equalTo(expectedStatusCode));
+    }
+
     @And("the response contains the details of the todo with the requested ID")
     public void assertResponseContainsExpectedToDo() throws IOException {
         assertTrue("Response should be an instance of a Todo object", toDoResponse.getLeft() instanceof ToDoResponse);
@@ -105,6 +111,19 @@ public class ToDoApiStepDefinitions {
 
         ToDoRequest toDoRequest = createToDo(name, isComplete, dueDate);
 
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        createNewToDoResponse = restRequestHandler.createNewTodo(toDoRequest);
+    }
 
+    @And("the response should contain the created todo with name {string} and isComplete set to {string}")
+    public void assertResponseBodyContainsNewlyCreatedTodo(String expectedName, String expectedIsComplete) throws IOException {
+        String todoNameErrorMessage = String.format("Expected property value to be '%s' but was '%s'", expectedName, createNewToDoResponse.getLeft().getName());
+        String todoIsCompleteErrorMessage = String.format("Expected property value to be '%s' but was '%s'", expectedIsComplete, createNewToDoResponse.getLeft().getIsComplete());
+
+        assertTrue("Response should be an instance of a Todo object", createNewToDoResponse.getLeft() instanceof ToDoResponse);
+        assertNotNull("Todo ID should not be null", createNewToDoResponse.getLeft().getId());
+        assertEquals(todoNameErrorMessage, expectedName, createNewToDoResponse.getLeft().getName());
+        assertEquals(todoIsCompleteErrorMessage, expectedIsComplete, createNewToDoResponse.getLeft().getIsComplete());
+        assertNotNull("Todo Date Due should not be null", createNewToDoResponse.getLeft().getDateDue());
     }
 }

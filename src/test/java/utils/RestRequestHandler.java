@@ -1,5 +1,6 @@
 package utils;
 
+import api.models.requests.ToDoRequest;
 import api.models.response.ToDo;
 import api.models.response.ToDoResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
@@ -32,6 +33,24 @@ public class RestRequestHandler {
                 .header("Accept-Language", "en-US,en;q=0.9")
                 .header("CanAccess", "true")
                 .get(url)
+                .then()
+                .extract().response();
+
+        int statusCode = response.getStatusCode();
+
+        return Pair.of(response, statusCode);
+    }
+
+    private Pair<Response, Integer> restAssuredPostRequest(String url, Object requestBody) {
+        Response response = RestAssured.given()
+                .log().all()
+                .header("Content-Type", "application/json")
+                .header("Accept", "*/*")
+                .header("Accept-Encoding", "gzip, deflate, br, zstd")
+                .header("Accept-Language", "en-US,en;q=0.9")
+                .header("CanAccess", "true")
+                .body(requestBody)
+                .post(url)
                 .then()
                 .extract().response();
 
@@ -73,6 +92,17 @@ public class RestRequestHandler {
         url = url.replace("ID", Integer.toString(id));
 
         Pair<Response, Integer> responsePair = restAssuredGetRequest(url);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
+        return  Pair.of(toDoResponse, statusCode);
+    }
+
+    public Pair<ToDoResponse, Integer> createNewTodo(ToDoRequest todo) throws IOException {
+        String url = baseUrl + ReadPropertiesFile.readProperty("create-todo-endpoint");
+
+        Pair<Response, Integer> responsePair = restAssuredPostRequest(url, todo);
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
