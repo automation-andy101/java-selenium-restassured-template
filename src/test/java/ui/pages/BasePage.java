@@ -46,7 +46,7 @@ public class BasePage {
      * @param timeout the timeout in seconds to wait for the element to be visible
      * @return the WebElement that is visible
      */
-    public WebElement waitForElementToBeVisible(By locator, Duration timeout) {
+    public WebElement getElementWhenVisible(By locator, Duration timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
     }
@@ -58,7 +58,7 @@ public class BasePage {
      * @param timeout the timeout in seconds to wait for the element to be clickable
      * @return the WebElement that is clickable
      */
-    public WebElement waitForElementToBeClickable(By locator, Duration timeout) {
+    public WebElement getElementWhenClickable(By locator, Duration timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         return wait.until(ExpectedConditions.elementToBeClickable(locator));
     }
@@ -75,7 +75,7 @@ public class BasePage {
      */
     public boolean isElementDisplayed(By locator, Duration timeout) {
         try {
-            WebElement element = waitForElementToBeVisible(locator, timeout);
+            WebElement element = getElementWhenVisible(locator, timeout);
             return element.isDisplayed();
         } catch (Exception e) {
             logger.error("Element with locator " + locator.toString() + " is not displayed.");
@@ -95,7 +95,7 @@ public class BasePage {
      * @see java.time.Duration
      */
     public void enterText(By locator, String text, Duration timeout) {
-        WebElement element = waitForElementToBeVisible(locator, timeout);
+        WebElement element = getElementWhenVisible(locator, timeout);
         element.clear();
         element.sendKeys(text);
     }
@@ -108,7 +108,7 @@ public class BasePage {
      * @return the text of the element
      */
     public String getElementText(By locator, Duration timeout) {
-        WebElement element = waitForElementToBeVisible(locator, timeout);
+        WebElement element = getElementWhenVisible(locator, timeout);
         return element.getText();
     }
 
@@ -119,7 +119,7 @@ public class BasePage {
      * @param timeout the maximum time to wait for the element to become clickable
      */
     public void clickElement(By locator, Duration timeout) {
-        WebElement element = waitForElementToBeClickable(locator, timeout);
+        WebElement element = getElementWhenClickable(locator, timeout);
     }
 
     /**
@@ -129,7 +129,7 @@ public class BasePage {
      * @param timeout the maximum time to wait for the element to become clickable
      */
     public void pressEnterOnElement(By locator, Duration timeout) {
-        WebElement element = waitForElementToBeVisible(locator, timeout);
+        WebElement element = getElementWhenVisible(locator, timeout);
         Actions actions = new Actions(driver);
         actions.click(element).sendKeys(Keys.ENTER).perform();
     }
@@ -146,7 +146,7 @@ public class BasePage {
      * @see java.time.Duration
      */
     public String getTextUsingJS(By locator, Duration timeout) {
-        WebElement element = waitForElementToBeVisible(locator, timeout);
+        WebElement element = getElementWhenVisible(locator, timeout);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         return (String) js.executeScript("return arguments[0].textContent;", element);
     }
@@ -163,7 +163,7 @@ public class BasePage {
      * @see java.time.Duration
      */
     public void enterTextUsingJS(By locator, String text, Duration timeout) {
-        WebElement element = waitForElementToBeVisible(locator, timeout);
+        WebElement element = getElementWhenVisible(locator, timeout);
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("arguments[0].value='" + text + "';", element);
     }

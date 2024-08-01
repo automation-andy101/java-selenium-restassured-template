@@ -13,6 +13,7 @@ import org.hamcrest.MatcherAssert;
 import utils.RestRequestHandler;
 
 import static api.testdata.ToDoTestData.createToDo;
+import static api.testdata.ToDoTestData.updateToDo;
 import static org.junit.Assert.*;
 import java.io.IOException;
 import java.util.List;
@@ -25,6 +26,7 @@ public class ToDoApiStepDefinitions {
     public Pair<List<ToDo>, Integer> toDosResponse;
     public Pair<ToDoResponse, Integer> toDoResponse;
     public Pair<ToDoResponse, Integer> createNewToDoResponse;
+    public Pair<ToDoResponse, Integer> updateToDoResponse;
     public Pair<Response, Integer> deleteToDoResponse;
     private int todoId;
 
@@ -125,5 +127,21 @@ public class ToDoApiStepDefinitions {
         assertEquals(todoNameErrorMessage, expectedName, createNewToDoResponse.getLeft().getName());
         assertEquals(todoIsCompleteErrorMessage, expectedIsComplete, createNewToDoResponse.getLeft().getIsComplete());
         assertNotNull("Todo Date Due should not be null", createNewToDoResponse.getLeft().getDateDue());
+    }
+
+    @When("I send a PUT request to update with the todo with the extracted ID with the following data")
+    public void sendPutRequestToUpdateATodo(DataTable dataTable) throws IOException {
+        String name = dataTable.cell(1, 0);
+        boolean isComplete = Boolean.parseBoolean(dataTable.cell(1, 1));
+        String dueDate = dataTable.cell(1, 2);
+
+        if (Objects.equals(dueDate, "DATETIMENOW")) {
+            dueDate = getDateTimeNow("yyyy-MM-dd'T'HH:mm:ss");
+        }
+
+        ToDoRequest toDoRequest = updateToDo(name, isComplete, dueDate);
+
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        updateToDoResponse = restRequestHandler.updateTodo(toDoRequest);
     }
 }

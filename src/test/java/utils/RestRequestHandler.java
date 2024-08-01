@@ -59,6 +59,24 @@ public class RestRequestHandler {
         return Pair.of(response, statusCode);
     }
 
+    private Pair<Response, Integer> restAssuredPutRequest(String url, Object requestBody) {
+        Response response = RestAssured.given()
+                .log().all()
+                .header("Content-Type", "application/json")
+                .header("Accept", "*/*")
+                .header("Accept-Encoding", "gzip, deflate, br, zstd")
+                .header("Accept-Language", "en-US,en;q=0.9")
+                .header("CanAccess", "true")
+                .body(requestBody)
+                .put(url)
+                .then()
+                .extract().response();
+
+        int statusCode = response.getStatusCode();
+
+        return Pair.of(response, statusCode);
+    }
+
     private Pair<Response, Integer> restAssuredDeleteRequest(String url) {
         Response response = RestAssured.given()
                 .log().all()
@@ -103,6 +121,17 @@ public class RestRequestHandler {
         String url = baseUrl + ReadPropertiesFile.readProperty("create-todo-endpoint");
 
         Pair<Response, Integer> responsePair = restAssuredPostRequest(url, todo);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
+        return  Pair.of(toDoResponse, statusCode);
+    }
+
+    public Pair<ToDoResponse, Integer> updateTodo(ToDoRequest todo) throws IOException {
+        String url = baseUrl + ReadPropertiesFile.readProperty("create-todo-endpoint");
+
+        Pair<Response, Integer> responsePair = restAssuredPutRequest(url, todo);
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 

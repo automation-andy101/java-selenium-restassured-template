@@ -11,4 +11,13 @@ public class ToDoTestData {
 
         return toDoRequest;
     }
+
+    public static ToDoRequest updateToDo(String name, boolean isComplete, String dateDue) {
+        ToDoRequest toDoRequest = new ToDoRequest();
+        toDoRequest.setName(name);
+        toDoRequest.setComplete(isComplete);
+        toDoRequest.setDateDue(dateDue);
+
+        return toDoRequest;
+    }
 }
