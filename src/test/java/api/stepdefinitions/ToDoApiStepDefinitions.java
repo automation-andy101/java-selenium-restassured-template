@@ -26,7 +26,7 @@ public class ToDoApiStepDefinitions {
     public Pair<List<ToDo>, Integer> toDosResponse;
     public Pair<ToDoResponse, Integer> toDoResponse;
     public Pair<ToDoResponse, Integer> createNewToDoResponse;
-    public Pair<ToDoResponse, Integer> updateToDoResponse;
+    public Pair<Response, Integer> updateToDoResponse;
     public Pair<Response, Integer> deleteToDoResponse;
     private int todoId;
 
@@ -92,6 +92,16 @@ public class ToDoApiStepDefinitions {
         MatcherAssert.assertThat(createNewToDoResponse.getRight(), equalTo(expectedStatusCode));
     }
 
+    @Then("the response status code for updating a Todo is {int}")
+    public void responseStatusCodeForUpdatingATodoIs204(int expectedStatusCode) {
+        MatcherAssert.assertThat(updateToDoResponse.getRight(), equalTo(expectedStatusCode));
+    }
+
+    @Then("the response status code for deleting a Todo is {int}")
+    public void responseStatusCodeForDeletingATodoIs204(int expectedStatusCode) {
+        MatcherAssert.assertThat(deleteToDoResponse.getRight(), equalTo(expectedStatusCode));
+    }
+
     @And("the response contains the details of the todo with the requested ID")
     public void assertResponseContainsExpectedToDo() throws IOException {
         assertTrue("Response should be an instance of a Todo object", toDoResponse.getLeft() instanceof ToDoResponse);
@@ -129,19 +139,21 @@ public class ToDoApiStepDefinitions {
         assertNotNull("Todo Date Due should not be null", createNewToDoResponse.getLeft().getDateDue());
     }
 
-    @When("I send a PUT request to update with the todo with the extracted ID with the following data")
+    @When("I send a PUT request to update the todo with the following data")
     public void sendPutRequestToUpdateATodo(DataTable dataTable) throws IOException {
         String name = dataTable.cell(1, 0);
         boolean isComplete = Boolean.parseBoolean(dataTable.cell(1, 1));
-        String dueDate = dataTable.cell(1, 2);
-
-        if (Objects.equals(dueDate, "DATETIMENOW")) {
-            dueDate = getDateTimeNow("yyyy-MM-dd'T'HH:mm:ss");
-        }
+        String dueDate = toDosResponse.getLeft().get(1).getDateDue();
 
         ToDoRequest toDoRequest = updateToDo(name, isComplete, dueDate);
 
         RestRequestHandler restRequestHandler = new RestRequestHandler();
-        updateToDoResponse = restRequestHandler.updateTodo(toDoRequest);
+        updateToDoResponse = restRequestHandler.updateTodo(toDoRequest, todoId);
+    }
+
+    @When("I send a DELETE request to remove the todo")
+    public void sendDeleteRequestToRemoveATodo() throws IOException {
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        deleteToDoResponse = restRequestHandler.deleteToDo(todoId);
     }
 }

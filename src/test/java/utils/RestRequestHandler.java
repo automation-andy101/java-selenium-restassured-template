@@ -128,15 +128,15 @@ public class RestRequestHandler {
         return  Pair.of(toDoResponse, statusCode);
     }
 
-    public Pair<ToDoResponse, Integer> updateTodo(ToDoRequest todo) throws IOException {
-        String url = baseUrl + ReadPropertiesFile.readProperty("create-todo-endpoint");
+    public Pair<Response, Integer> updateTodo(ToDoRequest todo, int id) throws IOException {
+        String url = baseUrl + ReadPropertiesFile.readProperty("update-todo-endpoint");
+        url = url.replace("ID", Integer.toString(id));
 
         Pair<Response, Integer> responsePair = restAssuredPutRequest(url, todo);
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
-        ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
-        return  Pair.of(toDoResponse, statusCode);
+        return  Pair.of(response, statusCode);
     }
 
     public Pair<Response, Integer> deleteToDo(int id) throws IOException {

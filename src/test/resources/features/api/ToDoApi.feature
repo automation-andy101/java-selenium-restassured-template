@@ -7,7 +7,7 @@ Feature: Todo API
 #    When I send a GET request to retrieve all todos
 #    Then the response status code for getting all Todos is 200
 #    And the response contains a list of todos
-#
+
 #  Scenario: Get a single todo by ID
 #    Given I send a GET request to retrieve all todos
 #    And I extract the ID of the first todo in the list
@@ -25,20 +25,17 @@ Feature: Todo API
   Scenario: Update a todo
     Given I send a GET request to retrieve all todos
     And I extract the ID of the first todo in the list
-    When I send a PUT request to update with the todo with the extracted ID with the following data
+    When I send a PUT request to update the todo with the following data
       | name         | isComplete |
-      | Updated Todo | false      |
-    Then the response status code for updating a new Todo is 204
-    And the response should be in JSON format
-    And the response should contain the updated todo with title "Updated Todo" and description "This is an updated todo"
+      | Updated Todo | true       |
+    Then the response status code for updating a Todo is 204
 
-#  Scenario: Delete a todo
-#    Given the API is running
-#    And a todo with ID 1 exists
-#    When I send a DELETE request to "/todos/1"
-#    Then the response status code should be 204
-#    And the todo with ID 1 should no longer exist
-#
+  Scenario: Delete a todo
+    Given I send a GET request to retrieve all todos
+    And I extract the ID of the first todo in the list
+    When I send a DELETE request to remove the todo
+    Then the response status code for deleting a Todo is 204
+
 #  Scenario: Error when getting a non-existent todo
 #    Given the API is running
 #    When I send a GET request to "/todos/999"
