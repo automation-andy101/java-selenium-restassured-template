@@ -113,6 +113,25 @@ public class RestRequestHandler {
         Response response = responsePair.getLeft();
         int statusCode = responsePair.getRight();
 
+        ToDoResponse toDoResponse;
+
+        if (Integer.toString(statusCode).charAt(0) == '2') {
+            toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
+        } else {
+            toDoResponse = null;
+        }
+
+        return  Pair.of(toDoResponse, statusCode);
+    }
+
+    public Pair<ToDoResponse, Integer> getTodoByIdInvalidId(int id) throws IOException {
+        String url = baseUrl + ReadPropertiesFile.readProperty("get-todo-endpoint");
+        url = url.replace("ID", Integer.toString(id));
+
+        Pair<Response, Integer> responsePair = restAssuredGetRequest(url);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
         ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
         return  Pair.of(toDoResponse, statusCode);
     }

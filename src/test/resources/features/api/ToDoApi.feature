@@ -8,12 +8,12 @@ Feature: Todo API
 #    Then the response status code for getting all Todos is 200
 #    And the response contains a list of todos
 
-#  Scenario: Get a single todo by ID
-#    Given I send a GET request to retrieve all todos
-#    And I extract the ID of the first todo in the list
-#    When I send a GET request for the todo with the extracted ID
-#    Then the response status code for getting a single Todo is 200
-#    And the response contains the details of the todo with the requested ID
+  Scenario: Get a single todo by ID
+    Given I send a GET request to retrieve all todos
+    And I extract the ID of the first todo in the list
+    When I send a GET request for the todo with the extracted ID
+    Then the response status code for getting a single Todo is 200
+    And the response contains the details of the todo with the requested ID
 
 #  Scenario: Create a new todo
 #    When I send a POST request to create a new todo with the following data
@@ -36,13 +36,10 @@ Feature: Todo API
     When I send a DELETE request to remove the todo
     Then the response status code for deleting a Todo is 204
 
-#  Scenario: Error when getting a non-existent todo
-#    Given the API is running
-#    When I send a GET request to "/todos/999"
-#    Then the response status code should be 404
-#    And the response should be in JSON format
-#    And the response should contain an error message "Todo not found"
-#
+  Scenario: Error when getting a non-existent todo
+    When I send a GET request to retrieve a todo with ID 99999
+    Then the response status code for getting a single Todo is 404
+
 #  Scenario: Error when creating a todo with missing fields
 #    Given the API is running
 #    When I send a POST request to "/todos" with the following data

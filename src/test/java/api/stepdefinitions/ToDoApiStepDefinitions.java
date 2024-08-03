@@ -83,7 +83,7 @@ public class ToDoApiStepDefinitions {
     }
 
     @Then("the response status code for getting a single Todo is {int}")
-    public void responseStatusCodeForGettingASingleTodoIs200(int expectedStatusCode) {
+    public void responseStatusCodeForGettingASingleTodoIs(int expectedStatusCode) {
         MatcherAssert.assertThat(toDoResponse.getRight(), equalTo(expectedStatusCode));
     }
 
@@ -156,4 +156,11 @@ public class ToDoApiStepDefinitions {
         RestRequestHandler restRequestHandler = new RestRequestHandler();
         deleteToDoResponse = restRequestHandler.deleteToDo(todoId);
     }
+
+    @When("I send a GET request to retrieve a todo with ID {int}")
+    public void sendAGetRequestToGetATodoWithId(int id) throws IOException {
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        toDoResponse = restRequestHandler.getTodoById(id);
+    }
+
 }
