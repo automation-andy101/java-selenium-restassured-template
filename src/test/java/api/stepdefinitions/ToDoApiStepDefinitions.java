@@ -2,6 +2,7 @@ package api.stepdefinitions;
 
 import api.models.requests.ToDoRequest;
 import api.models.response.ToDo;
+import api.models.response.ToDoErrorResponse;
 import api.models.response.ToDoResponse;
 import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.And;
@@ -26,6 +27,7 @@ public class ToDoApiStepDefinitions {
     public Pair<List<ToDo>, Integer> toDosResponse;
     public Pair<ToDoResponse, Integer> toDoResponse;
     public Pair<ToDoResponse, Integer> createNewToDoResponse;
+    public Pair<ToDoErrorResponse, Integer> createNewToDoErrorResponse;
     public Pair<Response, Integer> updateToDoResponse;
     public Pair<Response, Integer> deleteToDoResponse;
     private int todoId;
@@ -88,8 +90,13 @@ public class ToDoApiStepDefinitions {
     }
 
     @Then("the response status code for creating a new Todo is {int}")
-    public void responseStatusCodeForCreatingANewTodoIs201(int expectedStatusCode) {
+    public void responseStatusCodeForCreatingANewTodoIs(int expectedStatusCode) {
         MatcherAssert.assertThat(createNewToDoResponse.getRight(), equalTo(expectedStatusCode));
+    }
+
+    @Then("the response status code for creating a new Todo with missing data is {int}")
+    public void responseStatusCodeForCreatingANewTodoWithMissingDataIs(int expectedStatusCode) {
+        MatcherAssert.assertThat(createNewToDoErrorResponse.getRight(), equalTo(expectedStatusCode));
     }
 
     @Then("the response status code for updating a Todo is {int}")
@@ -163,4 +170,25 @@ public class ToDoApiStepDefinitions {
         toDoResponse = restRequestHandler.getTodoById(id);
     }
 
+    @When("I send a POST request to create a new todo with missing data")
+    public void sendPostRequestToCreateNewTodoWithMissingData(DataTable dataTable) throws IOException {
+        String name = dataTable.cell(1, 0);
+        boolean isComplete = Boolean.parseBoolean(dataTable.cell(1, 1));
+        String dueDate = dataTable.cell(1, 2);
+
+        if (Objects.equals(dueDate, "DATETIMENOW")) {
+            dueDate = getDateTimeNow("yyyy-MM-dd'T'HH:mm:ss");
+        }
+
+        ToDoRequest toDoRequest = createToDo(name, isComplete, dueDate);
+
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        createNewToDoErrorResponse = restRequestHandler.createNewTodoWithMissingFields(toDoRequest);
+    }
+
+    @And("the response should contain error message {string}")
+    public void assertResponseBodyContainsErrorMessage(String expectedError) throws IOException {
+        assertTrue("Response should be an instance of a Todo Error message object", createNewToDoErrorResponse.getLeft() instanceof ToDoErrorResponse);
+        assertEquals(expectedError, expectedError, createNewToDoErrorResponse.getLeft().getName().get(0));
+    }
 }

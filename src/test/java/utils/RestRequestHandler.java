@@ -2,6 +2,7 @@ package utils;
 
 import api.models.requests.ToDoRequest;
 import api.models.response.ToDo;
+import api.models.response.ToDoErrorResponse;
 import api.models.response.ToDoResponse;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
@@ -52,6 +53,7 @@ public class RestRequestHandler {
                 .body(requestBody)
                 .post(url)
                 .then()
+                .log().all()
                 .extract().response();
 
         int statusCode = response.getStatusCode();
@@ -124,18 +126,6 @@ public class RestRequestHandler {
         return  Pair.of(toDoResponse, statusCode);
     }
 
-    public Pair<ToDoResponse, Integer> getTodoByIdInvalidId(int id) throws IOException {
-        String url = baseUrl + ReadPropertiesFile.readProperty("get-todo-endpoint");
-        url = url.replace("ID", Integer.toString(id));
-
-        Pair<Response, Integer> responsePair = restAssuredGetRequest(url);
-        Response response = responsePair.getLeft();
-        int statusCode = responsePair.getRight();
-
-        ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
-        return  Pair.of(toDoResponse, statusCode);
-    }
-
     public Pair<ToDoResponse, Integer> createNewTodo(ToDoRequest todo) throws IOException {
         String url = baseUrl + ReadPropertiesFile.readProperty("create-todo-endpoint");
 
@@ -145,6 +135,18 @@ public class RestRequestHandler {
 
         ToDoResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoResponse.class);
         return  Pair.of(toDoResponse, statusCode);
+    }
+
+    public Pair<ToDoErrorResponse, Integer> createNewTodoWithMissingFields(ToDoRequest todo) throws IOException {
+        String url = baseUrl + ReadPropertiesFile.readProperty("create-todo-endpoint");
+
+        Pair<Response, Integer> responsePair = restAssuredPostRequest(url, todo);
+        Response response = responsePair.getLeft();
+        int statusCode = responsePair.getRight();
+
+        ToDoErrorResponse toDoResponse = mapper.readValue(response.getBody().asString(), ToDoErrorResponse.class);
+
+        return Pair.of(toDoResponse, statusCode);
     }
 
     public Pair<Response, Integer> updateTodo(ToDoRequest todo, int id) throws IOException {
