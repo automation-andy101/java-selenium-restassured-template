@@ -1,7 +1,14 @@
 package ui.hooks;
 
+import com.aventstack.extentreports.ExtentReports;
+import com.aventstack.extentreports.ExtentTest;
+import com.aventstack.extentreports.reporter.ExtentSparkReporter;
+import com.aventstack.extentreports.reporter.configuration.ExtentSparkReporterConfig;
+import com.aventstack.extentreports.reporter.configuration.Theme;
 import io.cucumber.java.After;
 import io.cucumber.java.Before;
+import io.cucumber.java.BeforeAll;
+import io.cucumber.java.Scenario;
 import io.github.bonigarcia.wdm.WebDriverManager;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -13,6 +20,7 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.safari.SafariOptions;
 import utils.ReadPropertiesFile;
+import utils.Utils;
 
 import java.io.IOException;
 
@@ -20,6 +28,25 @@ public class Hooks {
 //    private static WebDriver driver;
 //    private static ThreadLocal<WebDriver> driver = new ThreadLocal<>();
     private static WebDriver driver;
+    private static ExtentSparkReporter sparkReporter;
+    private static ExtentReports extent;
+    private static ExtentTest extentTest;
+
+    @BeforeAll
+    public static void beforeAll() {
+        extent = new ExtentReports();
+        sparkReporter = new ExtentSparkReporter(System.getProperty("user.dir") + "\\test-output\\testReport.html");
+        extent.attachReporter(sparkReporter);
+
+        sparkReporter.config(
+                ExtentSparkReporterConfig.builder()
+                        .theme(Theme.DARK)
+                        .documentTitle("Selenium UI Test Report")
+                        .offlineMode(true)
+                        .build()
+        );
+
+    }
 
     @Before
     public void setUp() throws IOException {
@@ -86,7 +113,17 @@ public class Hooks {
 //    }
 
     @After
-    public void tearDown() {
+    public void tearDown(Scenario scenario) {
+        if (scenario.isFailed()) {
+            try {
+//                Utils.takeScreenshot(driver, scenario.getName());
+                Utils.takeScreenshotUsingAShort(driver, scenario.getName());
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+
+        // Quit WebDriver
         if (driver != null) {
             driver.quit();
         }

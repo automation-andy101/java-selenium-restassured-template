@@ -6,6 +6,10 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
+import utils.Utils;
+
+import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 
 /**
@@ -168,4 +172,19 @@ public class BasePage {
         js.executeScript("arguments[0].value='" + text + "';", element);
     }
 
+    /**
+     * Enter text into a web element located by the specified locator within a given timeout.
+     *
+     * @param locator the locator used to find the web element
+     * @param timeout the maximum time to wait for the element to become clickable
+     * @throws NoSuchElementException if the element cannot be found
+     * @throws TimeoutException if the element is not clickable within the specified timeout
+     * @see org.openqa.selenium.By
+     * @see java.time.Duration
+     */
+    public void clickElementUsingJS(By locator, Duration timeout) {
+        WebElement element = getElementWhenVisible(locator, timeout);
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("arguments[0].click();", element);
+    }
 }

@@ -36,12 +36,12 @@ public class AddNewToDoStepDefinitions {
     }
 
     @When("I enter {string} into the add new todo input element")
-    public void addNewTodoInputElement(String text) {
+    public void addNewTodoInputElement(String text) throws IOException {
         toDoListPage.enterTextIntoAddNewToDoInputBox(text, Duration.ofSeconds(10));
     }
 
     @When("select the current date")
-    public void selectCurrentDate() {
+    public void selectCurrentDate() throws IOException {
         toDoListPage.selectTodaysDateFromDateSelector(Duration.ofSeconds(10));
     }
 
