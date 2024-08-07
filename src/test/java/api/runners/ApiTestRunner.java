@@ -8,7 +8,8 @@ import org.junit.runner.RunWith;
 @CucumberOptions(
         features = {"classpath:features/api"},
         glue = {"api.stepdefinitions", "api.hooks"},
-        plugin = {"pretty", "html:target/cucumber-reports"}
+//        plugin = {"pretty", "html:target/cucumber-reports"}
+        plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"}
 )
 public class ApiTestRunner {
 }

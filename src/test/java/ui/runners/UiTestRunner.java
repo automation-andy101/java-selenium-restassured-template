@@ -8,7 +8,8 @@ import io.cucumber.junit.CucumberOptions;
 @CucumberOptions(
         features = {"classpath:features/ui"},
         glue = {"ui.stepdefinitions", "ui.hooks"},
-        plugin = {"pretty", "html:target/cucumber-reports"}
+//        plugin = {"pretty", "html:target/cucumber-reports"}
+        plugin = {"io.qameta.allure.cucumber7jvm.AllureCucumber7Jvm"}
 )
 public class UiTestRunner {
 }

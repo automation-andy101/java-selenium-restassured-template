@@ -11,7 +11,7 @@ import java.util.Date;
 public class ToDoListPage extends BasePage {
     private final By addNewToDoInput = By.id("add-name");
     private final By addNewToDoDate = By.id("add-date");
-    private final By addNewToDobutton = By.id("addxxxx");
+    private final By addNewToDobutton = By.id("add");
     private final By toDosTable = By.id("todos");
 
     /**
