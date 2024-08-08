@@ -12,6 +12,7 @@ import utils.RestRequestHandler;
 
 import java.io.IOException;
 import java.time.Duration;
+import java.util.ArrayList;
 import java.util.List;
 
 public class AddNewToDoStepDefinitions {
@@ -20,6 +21,7 @@ public class AddNewToDoStepDefinitions {
     public Pair<List<ToDo>, Integer> toDoResponse;
     public Pair<List<ToDo>, Integer> toDoResponse2;
     public Pair<Response, Integer> deleteToDoResponse;
+    public static List<String> todoNamesToDelete = new ArrayList<>();
 
     @Given("the todo list is empty")
     public void todoListIsEmpty() throws IOException {
@@ -37,23 +39,22 @@ public class AddNewToDoStepDefinitions {
 
     @When("I enter {string} into the add new todo input element")
     public void addNewTodoInputElement(String text) throws IOException {
+        todoNamesToDelete.add(text);
         toDoListPage.enterTextIntoAddNewToDoInputBox(text, Duration.ofSeconds(10));
     }
 
     @When("select the current date")
     public void selectCurrentDate() throws IOException {
-        toDoListPage.selectTodaysDateFromDateSelector(Duration.ofSeconds(10));
+        toDoListPage.selectTodaysDateFromDateSelector(Duration.ofSeconds(5));
     }
 
     @And("click the Add button")
     public void clickAddButton() {
-        toDoListPage.clickAddNewTodoButton(Duration.ofSeconds(10));
+        toDoListPage.clickAddNewTodoButton(Duration.ofSeconds(5));
     }
 
-    @Then("table row {int} Name column contains {string}")
-    public void assertTableRowNameCellText(int rowNum, String expectedText) throws InterruptedException {
-        String actualText = toDoListPage.getNameTextForRow(rowNum);
-        Assert.assertEquals("Expected Name text at Row " + rowNum + " to be " + expectedText + " but got " + actualText, actualText, expectedText);
-        Thread.sleep(20000);
+    @Then("new todo {string} appears in the todo list")
+    public void assertTableTodoTableContainsNewEntry(String expectedText) {
+        Assert.assertTrue("Expected todo with name " + expectedText + " to be present, but was not", toDoListPage.searchTodoTableForName(expectedText));
     }
 }

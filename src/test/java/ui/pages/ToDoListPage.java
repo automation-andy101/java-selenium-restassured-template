@@ -2,11 +2,13 @@ package ui.pages;
 
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
+import org.openqa.selenium.WebElement;
 
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.time.Duration;
 import java.util.Date;
+import java.util.List;
 
 public class ToDoListPage extends BasePage {
     private final By addNewToDoInput = By.id("add-name");
@@ -60,7 +62,7 @@ public class ToDoListPage extends BasePage {
      * @param timeout the timeout in seconds to wait for the add new todo button element to be visible
      */
     public void clickAddNewTodoButton(Duration timeout) {
-        clickElement(addNewToDobutton, timeout);
+        clickElementUsingJS(addNewToDobutton, timeout);
     }
 
     /**
@@ -73,5 +75,27 @@ public class ToDoListPage extends BasePage {
         int nameColumnNum = 2;
         By locatorForTableCell = By.xpath("//tbody[@id='todos']/tr[" + rowNum + "]/td[" + nameColumnNum + "]");
         return getElementText(locatorForTableCell, Duration.ofSeconds(5));
+    }
+
+    /**
+     * Search the todo list table for a specific todo name
+     *
+     * @param expectedNameText the todo name looking for
+     * @return true if todo name was found, else false
+     */
+    public boolean searchTodoTableForName(String expectedNameText) {
+        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
+        List<WebElement> rows = table.findElements((By.tagName("tr")));
+
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+
+            WebElement nameCell = cells.get(1);
+            if (nameCell.getText().contains(expectedNameText)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }

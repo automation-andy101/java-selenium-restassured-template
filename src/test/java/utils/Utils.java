@@ -1,6 +1,8 @@
 package utils;
 
+import api.models.response.ToDo;
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.tuple.Pair;
 import org.openqa.selenium.OutputType;
 import org.openqa.selenium.TakesScreenshot;
 import org.openqa.selenium.WebDriver;
@@ -17,6 +19,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
+import java.util.List;
 import java.util.Objects;
 
 public class Utils {
@@ -95,5 +98,34 @@ public class Utils {
 
         File outputfile = new File("screenshots/" + fileName  + "_" + timeStamp + ".png");
         ImageIO.write(screenshot.getImage(), "png", outputfile);
+    }
+
+    public static int getIdOfTodo(String nameOfTodo) throws IOException {
+        // Get all todos
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        Pair<List<ToDo>, Integer> todosResp = restRequestHandler.getTodos();
+        List<ToDo> todos = todosResp.getLeft();
+
+        for (ToDo todo : todos) {
+            if (todo.getName().equals(nameOfTodo)) {
+                return todo.getId();
+            }
+        }
+
+        return -1;
+    }
+
+    public static void deleteTodoWithName(String nameOfTodo) throws IOException {
+        // Get all todos
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        Pair<List<ToDo>, Integer> todosResp = restRequestHandler.getTodos();
+        List<ToDo> todos = todosResp.getLeft();
+
+        for (ToDo todo : todos) {
+            if (todo.getName().equals(nameOfTodo)) {
+                restRequestHandler.deleteToDo(todo.getId());
+                break;
+            }
+        }
     }
 }
