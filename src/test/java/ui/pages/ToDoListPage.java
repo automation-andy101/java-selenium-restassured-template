@@ -72,7 +72,7 @@ public class ToDoListPage extends BasePage {
      */
     public void clickDeleteTodoButton(String expectedNameText) {
         WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
-        List<WebElement> rows = table.findElements((By.tagName("tr")));
+        List<WebElement> rows = table.findElements(By.tagName("tr"));
 
         for (WebElement row : rows) {
             List<WebElement> cells = row.findElements(By.tagName("td"));
