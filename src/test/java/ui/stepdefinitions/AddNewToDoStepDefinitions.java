@@ -1,6 +1,9 @@
 package ui.stepdefinitions;
 
+import api.models.requests.ToDoRequest;
 import api.models.response.ToDo;
+import api.models.response.ToDoResponse;
+import io.cucumber.datatable.DataTable;
 import io.cucumber.java.en.*;
 import io.restassured.response.Response;
 import org.apache.commons.lang3.tuple.Pair;
@@ -14,6 +17,10 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+
+import static api.testdata.ToDoTestData.createToDo;
+import static utils.Utils.getDateTimeNow;
 
 public class AddNewToDoStepDefinitions {
     private WebDriver driver = Hooks.getDriver();
@@ -37,6 +44,22 @@ public class AddNewToDoStepDefinitions {
         }
     }
 
+    @Given("a new todo has been created with the following data")
+    public void createANewTodo(DataTable dataTable) throws IOException {
+        String name = dataTable.cell(1, 0);
+        boolean isComplete = Boolean.parseBoolean(dataTable.cell(1, 1));
+        String dueDate = dataTable.cell(1, 2);
+
+        if (Objects.equals(dueDate, "DATETIMENOW")) {
+            dueDate = getDateTimeNow("yyyy-MM-dd'T'HH:mm:ss");
+        }
+
+        ToDoRequest toDoRequest = createToDo(name, isComplete, dueDate);
+
+        RestRequestHandler restRequestHandler = new RestRequestHandler();
+        Pair<ToDoResponse, Integer> createNewToDoResponse = restRequestHandler.createNewTodo(toDoRequest);
+    }
+
     @When("I enter {string} into the add new todo input element")
     public void addNewTodoInputElement(String text) throws IOException {
         todoNamesToDelete.add(text);
@@ -45,12 +68,17 @@ public class AddNewToDoStepDefinitions {
 
     @When("select the current date")
     public void selectCurrentDate() throws IOException {
-        toDoListPage.selectTodaysDateFromDateSelector(Duration.ofSeconds(5));
+        toDoListPage.selectTodaysDateFromDateSelector();
+    }
+
+    @When("I click the Delete button for todo with name {string}")
+    public void clickDeleteButtonForTodoWithName(String text) throws IOException {
+        toDoListPage.clickDeleteTodoButton(text);
     }
 
     @And("click the Add button")
     public void clickAddButton() {
-        toDoListPage.clickAddNewTodoButton(Duration.ofSeconds(5));
+        toDoListPage.clickAddNewTodoButton();
     }
 
     @Then("new todo {string} appears in the todo list")

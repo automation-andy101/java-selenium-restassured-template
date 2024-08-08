@@ -49,7 +49,7 @@ public class ToDoListPage extends BasePage {
      *
      * @param timeout the timeout in seconds to wait for the add new todo input field element to be visible
      */
-    public void selectTodaysDateFromDateSelector(Duration timeout) {
+    public void selectTodaysDateFromDateSelector() {
         Date today = new Date();
         SimpleDateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
         String formattedDate = formatter.format(today);
@@ -61,8 +61,28 @@ public class ToDoListPage extends BasePage {
      *
      * @param timeout the timeout in seconds to wait for the add new todo button element to be visible
      */
-    public void clickAddNewTodoButton(Duration timeout) {
-        clickElementUsingJS(addNewToDobutton, timeout);
+    public void clickAddNewTodoButton() {
+        clickElementUsingJS(addNewToDobutton, Duration.ofSeconds(5));
+    }
+
+    /**
+     * Search the todo list table for a specific todo name then click the delete button
+     *
+     * @param expectedNameText the todo name looking for
+     */
+    public void clickDeleteTodoButton(String expectedNameText) {
+        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
+        List<WebElement> rows = table.findElements((By.tagName("tr")));
+
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+
+            WebElement nameCell = cells.get(1);
+            if (nameCell.getText().contains(expectedNameText)) {
+                row.findElement()
+                break;
+            }
+        }
     }
 
     /**
