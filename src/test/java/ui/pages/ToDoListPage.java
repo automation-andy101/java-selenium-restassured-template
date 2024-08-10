@@ -79,7 +79,9 @@ public class ToDoListPage extends BasePage {
 
             WebElement nameCell = cells.get(1);
             if (nameCell.getText().contains(expectedNameText)) {
-                row.findElement()
+
+                xxxxxxxx
+
                 break;
             }
         }
