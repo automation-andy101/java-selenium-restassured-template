@@ -58,8 +58,6 @@ public class ToDoListPage extends BasePage {
 
     /**
      * Click Add button element.
-     *
-     * @param timeout the timeout in seconds to wait for the add new todo button element to be visible
      */
     public void clickAddNewTodoButton() {
         clickElementUsingJS(addNewToDobutton, Duration.ofSeconds(5));
@@ -70,21 +68,44 @@ public class ToDoListPage extends BasePage {
      *
      * @param expectedNameText the todo name looking for
      */
-    public void clickDeleteTodoButton(String expectedNameText) {
+    public void clickDeleteTodoButton(String expectedNameText) throws InterruptedException {
         WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
-        List<WebElement> rows = table.findElements(By.tagName("tr"));
+        List<WebElement> elements = table.findElements(By.xpath("//tbody[@id='todos']//td[text()='" + expectedNameText + "'])"));
 
-        for (WebElement row : rows) {
-            List<WebElement> cells = row.findElements(By.tagName("td"));
-
-            WebElement nameCell = cells.get(1);
-            if (nameCell.getText().contains(expectedNameText)) {
-
-                xxxxxxxx
-
-                break;
-            }
+        int i = 1;
+        for (WebElement element : elements) {
+            System.out.println(element);
+//            clickElement(By.xpath("(//tbody[@id='todos']//td[text()='" + expectedNameText + "'])[" + i + "]/following-sibling::*[3]//button"), Duration.ofSeconds(5));
+            Thread.sleep(5000);
+            i++;
         }
+
+
+//        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
+//        List<WebElement> rows = table.findElements(By.tagName("tr"));
+
+
+//
+//        int i = 1;
+//        List<WebElement> cells;
+//        for (WebElement row : rows) {
+//
+//            System.out.println("HELLO WORLD - " + i);
+//            System.out.println("HELLO WORLD row - " + row);
+//            cells = null;
+//            cells = row.findElements(By.tagName("td"));
+//
+//            WebElement nameCell = cells.get(1);
+//            if (nameCell.getText().contains(expectedNameText)) {
+//                System.out.println("Found text - " + nameCell.getText() + " " + i);
+//                System.out.println("XPath is - " + "(//tbody[@id='todos']//td[text()='" + expectedNameText + "'])[" + i + "]/following-sibling::*[3]//button");
+////                           clickElement(By.xpath("(//tbody[@id='todos']//td[text()='TEST TODO'])[1]               /following-sibling::*[3]//button"), Duration.ofSeconds(5));
+//                clickElement(By.xpath("(//tbody[@id='todos']//td[text()='" + expectedNameText + "'])[" + i + "]/following-sibling::*[3]//button"), Duration.ofSeconds(5));
+//                Thread.sleep(5000);
+//                i--;
+//            }
+//            i++;
+//        }
     }
 
     /**

@@ -72,8 +72,8 @@ public class AddNewToDoStepDefinitions {
     }
 
     @When("I click the Delete button for todo with name {string}")
-    public void clickDeleteButtonForTodoWithName(String text) throws IOException {
-        toDoListPage.clickDeleteTodoButton(text);
+    public void clickDeleteButtonForTodoWithName(String todoNameText) throws IOException, InterruptedException {
+        toDoListPage.clickDeleteTodoButton(todoNameText);
     }
 
     @And("click the Add button")
@@ -84,5 +84,10 @@ public class AddNewToDoStepDefinitions {
     @Then("new todo {string} appears in the todo list")
     public void assertTableTodoTableContainsNewEntry(String expectedText) {
         Assert.assertTrue("Expected todo with name " + expectedText + " to be present, but was not", toDoListPage.searchTodoTableForName(expectedText));
+    }
+
+    @Then("todo with name {string} no longer appears in todo table")
+    public void assertTodoHasBeenRemoved(String todoText) {
+//        Assert.assertTrue("Expected todo with name " + todoText + " to have been removed", toDoListPage.searchTodoTableForName(expectedText));
     }
 }
