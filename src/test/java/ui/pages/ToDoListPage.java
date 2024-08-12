@@ -68,44 +68,29 @@ public class ToDoListPage extends BasePage {
      *
      * @param expectedNameText the todo name looking for
      */
-    public void clickDeleteTodoButton(String expectedNameText) throws InterruptedException {
-        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
-        List<WebElement> elements = table.findElements(By.xpath("//tbody[@id='todos']//td[text()='" + expectedNameText + "'])"));
+    public void deleteTodoMatchingText(String expectedNameText) throws InterruptedException {
+        boolean todoFound = true;
 
-        int i = 1;
-        for (WebElement element : elements) {
-            System.out.println(element);
-//            clickElement(By.xpath("(//tbody[@id='todos']//td[text()='" + expectedNameText + "'])[" + i + "]/following-sibling::*[3]//button"), Duration.ofSeconds(5));
-            Thread.sleep(5000);
-            i++;
+        while (todoFound) {
+            List<WebElement> rows = getElementsWhenVisible(By.xpath("//tbody[@id='todos']/tr"), Duration.ofSeconds(5));
+            todoFound = false;
+
+            for (int i = 0; i < rows.size(); i++) {
+                WebElement row = rows.get(i);
+                WebElement todoNameElement = row.findElement(By.xpath(".//td[2]"));
+                String todoName = todoNameElement.getText();
+
+                if (todoName.equals(expectedNameText)) {
+                    WebElement deleteButton = row.findElement(By.xpath(".//td[5]/button"));
+                    deleteButton.click();
+                    Thread.sleep(5000);
+
+                    todoFound = true;
+
+                    break;
+                }
+            }
         }
-
-
-//        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
-//        List<WebElement> rows = table.findElements(By.tagName("tr"));
-
-
-//
-//        int i = 1;
-//        List<WebElement> cells;
-//        for (WebElement row : rows) {
-//
-//            System.out.println("HELLO WORLD - " + i);
-//            System.out.println("HELLO WORLD row - " + row);
-//            cells = null;
-//            cells = row.findElements(By.tagName("td"));
-//
-//            WebElement nameCell = cells.get(1);
-//            if (nameCell.getText().contains(expectedNameText)) {
-//                System.out.println("Found text - " + nameCell.getText() + " " + i);
-//                System.out.println("XPath is - " + "(//tbody[@id='todos']//td[text()='" + expectedNameText + "'])[" + i + "]/following-sibling::*[3]//button");
-////                           clickElement(By.xpath("(//tbody[@id='todos']//td[text()='TEST TODO'])[1]               /following-sibling::*[3]//button"), Duration.ofSeconds(5));
-//                clickElement(By.xpath("(//tbody[@id='todos']//td[text()='" + expectedNameText + "'])[" + i + "]/following-sibling::*[3]//button"), Duration.ofSeconds(5));
-//                Thread.sleep(5000);
-//                i--;
-//            }
-//            i++;
-//        }
     }
 
     /**

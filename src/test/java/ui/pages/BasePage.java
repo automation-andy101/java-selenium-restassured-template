@@ -11,6 +11,7 @@ import utils.Utils;
 import java.io.File;
 import java.io.IOException;
 import java.time.Duration;
+import java.util.List;
 
 /**
  * Base class for all page objects, providing common functionalities.
@@ -53,6 +54,18 @@ public class BasePage {
     public WebElement getElementWhenVisible(By locator, Duration timeout) {
         WebDriverWait wait = new WebDriverWait(driver, timeout);
         return wait.until(ExpectedConditions.visibilityOfElementLocated(locator));
+    }
+
+    /**
+     * Waits for the specified element to be visible within the given timeout and returns it.
+     *
+     * @param locator the By locator of the element to be visible
+     * @param timeout the timeout in seconds to wait for the element to be visible
+     * @return the WebElement that is visible
+     */
+    public List<WebElement> getElementsWhenVisible(By locator, Duration timeout) {
+        WebDriverWait wait = new WebDriverWait(driver, timeout);
+        return wait.until(ExpectedConditions.presenceOfAllElementsLocatedBy(locator));
     }
 
     /**

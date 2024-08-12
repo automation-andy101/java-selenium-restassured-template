@@ -73,7 +73,7 @@ public class AddNewToDoStepDefinitions {
 
     @When("I click the Delete button for todo with name {string}")
     public void clickDeleteButtonForTodoWithName(String todoNameText) throws IOException, InterruptedException {
-        toDoListPage.clickDeleteTodoButton(todoNameText);
+        toDoListPage.deleteTodoMatchingText(todoNameText);
     }
 
     @And("click the Add button")
