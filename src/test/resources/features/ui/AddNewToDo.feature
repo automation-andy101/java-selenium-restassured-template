@@ -21,12 +21,13 @@ Feature: Add a new todo feature
     When I click the Delete button for todo with name "TEST TODO"
     Then todo with name "TEST TODO" no longer appears in todo table
 
+  @DeleteCreatedTodoAfterTest
   @critical
   Scenario: Edit a todo
     Given a new todo has been created with the following data
       | name        | isComplete | dueDate     |
       | UPDATE TODO | false      | DATETIMENOW |
     When I click the Edit button for todo with name "UPDATE TODO"
-    And change the todo name to "UPDATED TODO"
+    And change the todos name to "UPDATED TODO"
     And click Save button
     Then todo with name "UPDATED TODO" now appears in todo table

@@ -73,11 +73,13 @@ public class AddNewToDoStepDefinitions {
 
     @When("I click the Delete button for todo with name {string}")
     public void clickDeleteButtonForTodoWithName(String todoNameText) throws IOException, InterruptedException {
+        driver.navigate().refresh();
         toDoListPage.deleteTodoMatchingText(todoNameText);
     }
 
     @When("I click the Edit button for todo with name {string}")
     public void clickEditButtonForTodoWithName(String todoNameText) throws IOException, InterruptedException {
+        driver.navigate().refresh();
         toDoListPage.editTodoMatchingText(todoNameText);
     }
 
@@ -86,14 +88,25 @@ public class AddNewToDoStepDefinitions {
         toDoListPage.clickAddNewTodoButton();
     }
 
-    @And("change the todo name to {string}")
-    public void enterTodoNewName(newTodoName) {
-        toDoListPage.clickAddNewTodoButton();
+    @And("click Save button")
+    public void clickSaveButton() throws InterruptedException {
+        toDoListPage.clickSaveTodoButton();
+    }
+
+    @And("change the todos name to {string}")
+    public void enterTodosNewName(String newTodoName) {
+        toDoListPage.enterTodosNewName(newTodoName);
+        todoNamesToDelete.add(newTodoName);
     }
 
     @Then("new todo {string} appears in the todo list")
-    public void assertTableTodoTableContainsNewEntry(String expectedText) {
+    public void assertTodoTableContainsNewTodo(String expectedText) {
         Assert.assertTrue("Expected todo with name " + expectedText + " to be present, but was not", toDoListPage.searchTodoTableForName(expectedText));
+    }
+
+    @Then("todo with name {string} now appears in todo table")
+    public void assertTodoTableContainsEditedTodo(String editedTodoName) {
+        Assert.assertTrue("Expected todo with name " + editedTodoName + " to be present, but was not", toDoListPage.searchTodoTableForName(editedTodoName));
     }
 
     @Then("todo with name {string} no longer appears in todo table")

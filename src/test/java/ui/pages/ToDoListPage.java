@@ -16,6 +16,7 @@ public class ToDoListPage extends BasePage {
     private final By addNewToDobutton = By.id("add");
     private final By toDosTable = By.id("todos");
     private final By editToDoNameInput = By.id("edit-name");
+    private final By saveTodo = By.id("save");
 
     /**
      * Constructor
@@ -63,6 +64,13 @@ public class ToDoListPage extends BasePage {
     }
 
     /**
+     * Click Save button element.
+     */
+    public void clickSaveTodoButton() {
+        clickElementUsingJS(saveTodo, Duration.ofSeconds(5));
+    }
+
+    /**
      * Search the todo list table for a specific todo name then click the delete button
      *
      * @param expectedNameText the todo name looking for
@@ -93,16 +101,16 @@ public class ToDoListPage extends BasePage {
      *
      * @param expectedNameText the todo name looking for
      */
-    public void editTodoMatchingText(String expectedNameText) throws InterruptedException {
-            List<WebElement> rows = getElementsWhenVisible(By.xpath("//tbody[@id='todos']/tr"), Duration.ofSeconds(5));
+    public void editTodoMatchingText(String expectedNameText) {
+        List<WebElement> rows = getElementsWhenVisible(By.xpath("//tbody[@id='todos']/tr"), Duration.ofSeconds(5));
 
             for (WebElement row : rows) {
                 WebElement todoNameElement = row.findElement(By.xpath(".//td[2]"));
                 String todoName = todoNameElement.getText();
 
                 if (todoName.equals(expectedNameText)) {
-                    WebElement deleteButton = row.findElement(By.xpath(".//td[4]/button"));
-                    deleteButton.click();
+                    WebElement editButton = row.findElement(By.xpath(".//td[4]/button"));
+                    editButton.click();
                     break;
                 }
             }
@@ -143,24 +151,11 @@ public class ToDoListPage extends BasePage {
     }
 
     /**
-     * Search the todo list table for a specific todo name
+     * Rename todo
      *
-     * @param todoNewName the todo name looking for
-     * @return true if todo name was found, else false
+     * @param todoNewName the new name of the todo
      */
-    public void enterTodoNewName(String todoNewName) {
-        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
-        List<WebElement> rows = table.findElements((By.tagName("tr")));
-
-        for (WebElement row : rows) {
-            List<WebElement> cells = row.findElements(By.tagName("td"));
-
-            WebElement nameCell = cells.get(1);
-            if (nameCell.getText().contains(expectedNameText)) {
-                return true;
-            }
-        }
-
-        return false;
+    public void enterTodosNewName(String todoNewName) {
+        enterText(editToDoNameInput, todoNewName, Duration.ofSeconds(5));
     }
 }
