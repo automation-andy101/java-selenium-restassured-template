@@ -15,6 +15,7 @@ public class ToDoListPage extends BasePage {
     private final By addNewToDoDate = By.id("add-date");
     private final By addNewToDobutton = By.id("add");
     private final By toDosTable = By.id("todos");
+    private final By editToDoNameInput = By.id("edit-name");
 
     /**
      * Constructor
@@ -46,8 +47,6 @@ public class ToDoListPage extends BasePage {
 
     /**
      * Enter todays date
-     *
-     * @param timeout the timeout in seconds to wait for the add new todo input field element to be visible
      */
     public void selectTodaysDateFromDateSelector() {
         Date today = new Date();
@@ -90,6 +89,26 @@ public class ToDoListPage extends BasePage {
     }
 
     /**
+     * Search the todo list table for a specific todo name then click the edit button
+     *
+     * @param expectedNameText the todo name looking for
+     */
+    public void editTodoMatchingText(String expectedNameText) throws InterruptedException {
+            List<WebElement> rows = getElementsWhenVisible(By.xpath("//tbody[@id='todos']/tr"), Duration.ofSeconds(5));
+
+            for (WebElement row : rows) {
+                WebElement todoNameElement = row.findElement(By.xpath(".//td[2]"));
+                String todoName = todoNameElement.getText();
+
+                if (todoName.equals(expectedNameText)) {
+                    WebElement deleteButton = row.findElement(By.xpath(".//td[4]/button"));
+                    deleteButton.click();
+                    break;
+                }
+            }
+    }
+
+    /**
      * Get column Name text for row n
      *
      * @param rowNum the row number
@@ -108,6 +127,28 @@ public class ToDoListPage extends BasePage {
      * @return true if todo name was found, else false
      */
     public boolean searchTodoTableForName(String expectedNameText) {
+        WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
+        List<WebElement> rows = table.findElements((By.tagName("tr")));
+
+        for (WebElement row : rows) {
+            List<WebElement> cells = row.findElements(By.tagName("td"));
+
+            WebElement nameCell = cells.get(1);
+            if (nameCell.getText().contains(expectedNameText)) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    /**
+     * Search the todo list table for a specific todo name
+     *
+     * @param todoNewName the todo name looking for
+     * @return true if todo name was found, else false
+     */
+    public void enterTodoNewName(String todoNewName) {
         WebElement table = getElementWhenVisible(toDosTable, Duration.ofSeconds(5));
         List<WebElement> rows = table.findElements((By.tagName("tr")));
 

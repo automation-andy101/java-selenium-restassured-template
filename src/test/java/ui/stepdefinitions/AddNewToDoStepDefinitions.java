@@ -76,8 +76,18 @@ public class AddNewToDoStepDefinitions {
         toDoListPage.deleteTodoMatchingText(todoNameText);
     }
 
+    @When("I click the Edit button for todo with name {string}")
+    public void clickEditButtonForTodoWithName(String todoNameText) throws IOException, InterruptedException {
+        toDoListPage.editTodoMatchingText(todoNameText);
+    }
+
     @And("click the Add button")
     public void clickAddButton() {
+        toDoListPage.clickAddNewTodoButton();
+    }
+
+    @And("change the todo name to {string}")
+    public void enterTodoNewName(newTodoName) {
         toDoListPage.clickAddNewTodoButton();
     }
 
@@ -88,6 +98,6 @@ public class AddNewToDoStepDefinitions {
 
     @Then("todo with name {string} no longer appears in todo table")
     public void assertTodoHasBeenRemoved(String todoText) {
-//        Assert.assertTrue("Expected todo with name " + todoText + " to have been removed", toDoListPage.searchTodoTableForName(expectedText));
+        Assert.assertFalse("Expected todo with name " + todoText + " to have been removed, but it still exists in the table", toDoListPage.searchTodoTableForName(todoText));
     }
 }
