@@ -75,18 +75,14 @@ public class ToDoListPage extends BasePage {
             List<WebElement> rows = getElementsWhenVisible(By.xpath("//tbody[@id='todos']/tr"), Duration.ofSeconds(5));
             todoFound = false;
 
-            for (int i = 0; i < rows.size(); i++) {
-                WebElement row = rows.get(i);
+            for (WebElement row : rows) {
                 WebElement todoNameElement = row.findElement(By.xpath(".//td[2]"));
                 String todoName = todoNameElement.getText();
 
                 if (todoName.equals(expectedNameText)) {
                     WebElement deleteButton = row.findElement(By.xpath(".//td[5]/button"));
                     deleteButton.click();
-                    Thread.sleep(5000);
-
                     todoFound = true;
-
                     break;
                 }
             }
